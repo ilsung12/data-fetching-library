@@ -1,25 +1,27 @@
-import { getTodos, postTodo } from './my-api';
-import React from 'react';
-import { useQueryClient, useQuery, useMutation } from 'react-query';
+import { getTodos, postTodo } from "./my-api";
+import React from "react";
+import { useQueryClient, useQuery, useMutation } from "react-query";
+import GlobalLoader from "./GlobalLoader";
 
 export default function QuickStart() {
   const queryClient = useQueryClient();
-  const query = useQuery('todos', getTodos);
+  const query = useQuery("todos", getTodos);
   const mutation = useMutation(postTodo, {
     onSuccess: () => {
-      queryClient.invalidateQueries('todos');
+      queryClient.invalidateQueries("todos");
     },
   });
 
   if (query.isLoading) {
-    return 'Loading...';
+    return "Loading...";
   }
   if (query.error) {
-    return 'Error...';
+    return "Error...";
   }
 
   return (
     <div>
+      <GlobalLoader />
       <ul>
         {query.data.map((todo) => (
           <li key={todo.id}>{todo.title}</li>
@@ -29,7 +31,7 @@ export default function QuickStart() {
         onClick={() => {
           mutation.mutate({
             id: Date.now(),
-            title: 'learn React-Query',
+            title: "learn React-Query",
           });
         }}
       >
